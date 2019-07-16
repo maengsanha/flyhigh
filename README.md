@@ -1,2 +1,2 @@
 # FlyHigh
-repository for internship in flyhigh, summer 2019
+Repository for internship in FlyHigh, summer 2019
