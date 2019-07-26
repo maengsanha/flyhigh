@@ -32,10 +32,13 @@ exports.lib = functions.https.onRequest((request, response) => {
     };
     db.collection('BookList').get().then((snapshot) => {
         snapshot.forEach((doc) => {
-            // console.log(doc.id, '=>', doc.data());
-            res.text += doc.data().book_title + ' / ' + doc.data().office + '\n';
+            // not to show DEFAULT data on response query
+            if (doc.data().book_title !== 'DEFAULT'){
+                res.text += doc.data().book_title + ' / ' + doc.data().office + '\n';
+            }
         });
         // send response qeury to Dooray! Messenger
+        // Success: status code 200
         response.send(res);
         // return Promise
         return;
@@ -72,6 +75,7 @@ exports.bookadd = functions.https.onRequest((request, response) => {
         'borrower': query[6]
     });
     // send response query to Dooray! Messenger
+    // Success: status code 200
     response.send(res);
 });
 
@@ -79,8 +83,8 @@ exports.bookadd = functions.https.onRequest((request, response) => {
 // command: /booksearch book_title
 exports.booksearch = functions.https.onRequest((request, response) => {
     // get command param, remove spaces
-    var target = request.body.text.trim();
-    // create response query
+    var title = request.body.text.trim();
+    // create default response query
     var res = {
         /*  ephemeral: only I can see this message
             inChannel : everyone can see this message */
@@ -90,18 +94,21 @@ exports.booksearch = functions.https.onRequest((request, response) => {
     db.collection('BookList').get().then((snapshot) => {
         snapshot.forEach((doc) => {
             var data = doc.data();
-            if (data.book_title===target){
-                if (data.borrower===''){
-                    res.text = target + '(은)는 ' + data.office + "에 있어요.\n지금 대여 가능합니다, 왈!";
+            if (data.book_title === title){
+                // if book is not on loan
+                if (data.borrower === ''){
+                    res.text = title + '(은)는 ' + data.office + "에 있어요.\n지금 대여 가능합니다, 왈!";
                     response.send(res);
                 }
+                // if book is on loan
                 else{
-                    res.text = target + '(은)는 ' + data.office + "에 있어요.\n현재 대여중입니다.\n" + "대여자는 " + data.borrower + '님입니다.';
+                    res.text = title + '(은)는 ' + data.office + "에 있어요.\n현재 대여중입니다.\n" + "대여자는 " + data.borrower + '님입니다.';
                     response.send(res);
                 }
             }
         });
         // send response query to Dooray! Messenger
+        // Success: status code 200
         response.send(res);
         // return Promise
         return;
@@ -111,29 +118,34 @@ exports.booksearch = functions.https.onRequest((request, response) => {
     });
 });
 
-// command: /req book_title, author, publisher, office
+// command: /req book_title, author, publisher, applicant, office, url
 exports.bookreq = functions.https.onRequest((request, response) => {
     // get command param, split by commas
-    var parsed_data = request.body.text.split(',', 4);
-    for (var info in parsed_data){
+    var query = request.body.text.split(',', 6);
+    for (var info in query){
         // remove spaces
         info.trim();
     }
     var data = {
-        'book_title': parsed_data[0],
-        'author': parsed_data[1],
-        'publisher': parsed_data[2],
-        'office': parsed_data[3],
+        'book_title': query[0],
+        'author': query[1],
+        'publisher': query[2],
+        'applicant': query[3],
+        'office': query[4],
+        'url': query[5],
+        'is_purchased': false
     };
-    db.collection('AppliedBooks').doc().set(data);
+    // set data on Database
+    db.collection('RequiredBooks').doc().set(data);
     // create response query
     var res = {
         /*  ephemeral: only I can see this message
             inChannel : everyone can see this message */
         'responseType': 'ephemeral',
-        'text': data.book_title + "(이)가 신청됐어요, 왈!"
+        'text': data.applicant + "님, " + data.book_title + "(이)가 신청됐어요, 왈!"
     };
     // send response query to Dooray! Messenger
+    // Success: status code 200
     response.send(res);
 });
 
@@ -150,11 +162,13 @@ exports.borrowable = functions.https.onRequest((request, response) => {
     db.collection('BookList').get().then((snapshot) => {
         snapshot.forEach((doc) => {
             var data = doc.data();
-            if (data.borrower===''){
+            // not to show DEFAULT data on response query
+            if (data.borrower === '' && data.book_title!=='DEFAULT'){
                 res.text += data.book_title + '\n';
             } 
         });
         // send response query to Dooray! Messenger
+        // Success: status code 200
         response.send(res);
         // return Promise
         return;
@@ -165,24 +179,25 @@ exports.borrowable = functions.https.onRequest((request, response) => {
 });
 
 
-// command: /delappbook book_title
-exports.delappbook = functions.https.onRequest((request, response) => {
+// command: /delreqbook book_title
+exports.delreqbook = functions.https.onRequest((request, response) => {
     // get command param, remove spaces
-    var target = request.body.text.trim();
+    var title = request.body.text.trim();
     // create response query
     var res = {
         /*  ephemeral: only I can see this message
             inChannel : everyone can see this message */
         'responseType': 'ephemeral',
-        'text': "도서 신청 목록에서 " + target + "(을)를 삭제했습니다."
+        'text': "도서 신청 목록에서 " + title + "(을)를 삭제했습니다."
     };
-    db.collection('AppliedBooks').get().then((snapshot) => {
+    db.collection('RequiredBooks').get().then((snapshot) => {
         snapshot.forEach((doc) => {
             var data = doc.data();
-            if (data.book_title===target){
+            if (data.book_title===title){
                 // delete data from Database
-                db.collection('AppliedBooks').doc(doc.id).delete();
+                db.collection('RequiredBooks').doc(doc.id).delete();
                 // send response query to Dooray! Messenger
+                // Success: status code 200
                 response.send(res);
             }
         });
@@ -198,21 +213,22 @@ exports.delappbook = functions.https.onRequest((request, response) => {
 // command: /bookdel book_title
 exports.bookdel = functions.https.onRequest((request, response) => {
     // get command param, remove spaces
-    var target = request.body.text.trim();
+    var title = request.body.text.trim();
     // create response query
     var res = {
         /*  ephemeral: only I can see this message
             inChannel : everyone can see this message */
         'responseType': 'ephemeral',
-        'text': "도서 목록에서 " + target + "(을)를 삭제했습니다."
+        'text': "도서 목록에서 " + title + "(을)를 삭제했습니다."
     };
     db.collection('BookList').get().then((snapshot) => {
         snapshot.forEach((doc) => {
             var data = doc.data();
-            if (data.book_title===target){
+            if (data.book_title===title){
                 // delete data from Database
                 db.collection('BookList').doc(doc.id).delete();
                 // send response query to Dooray! Messenger
+                // Success: status code 200
                 response.send(res);
             }
         });
@@ -268,11 +284,16 @@ exports.reqList = functions.https.onRequest((request, response) => {
         'responseType': 'ephemeral',
         'text': "현재 도서 신청 현황입니다.\n\n"
     };
-    db.collection('AppliedBooks').get().then((snapshot) => {
+    db.collection('RequiredBooks').get().then((snapshot) => {
         snapshot.forEach((doc) => {
-            res.text += doc.data().book_title + '\n';
+            // not to show DEFAULT data on response query
+            if (doc.data().book_title!=='DEFAULT'){
+                res.text += '도서명: ' + doc.data().book_title + '\nurl: ' + doc.data().url;
+                res.text += '\n신청자: ' + doc.data().applicant + '\n구매여부: ' + doc.data().is_purchased + '\n\n';
+            }
         });
         // send response query to Dooray! Messenger
+        // Success: status code 200
         response.send(res);
         // return Promise
         return;
@@ -286,24 +307,24 @@ exports.reqList = functions.https.onRequest((request, response) => {
 // command: /borrow book_title, user_name
 exports.borrow = functions.https.onRequest((request, response) => {
     // get command param, split by commas
-    var parsed_data = request.body.text.split(',', 2);
+    var query = request.body.text.split(',', 2);
     // access by index, remove spaces
-    var target = parsed_data[0].trim();
-    var user_name = parsed_data[1].trim();
+    var title = query[0].trim();
+    var user_name = query[1].trim();
     // create default response query
     var res = {
         /*  ephemeral: only I can see this message
             inChannel : everyone can see this message */
         'responseType': 'ephemeral',
-        'text': target + "이 도서 목록에 없어요\n도서를 신청하시려면 /applyBook을 이용해주세요, 왈!"
+        'text': title + "이 도서 목록에 없어요\n도서를 신청하시려면 /req를 이용해주세요, 왈!"
     };
     db.collection('BookList').get().then((snapshot) => {
         snapshot.forEach((doc) => {
-            if (doc.data().book_title===target){
+            if (doc.data().book_title===title){
                 if (doc.data().borrower===''){
                     // set data to Database
                     db.collection('BookList').doc(doc.id).set({
-                        'book_title': target,
+                        'book_title': title,
                         'author': doc.data().author,
                         'publisher': doc.data().publisher,
                         'category': doc.data().category,
@@ -311,15 +332,16 @@ exports.borrow = functions.https.onRequest((request, response) => {
                         'office': doc.data().office,
                         'borrower': user_name
                     });
-                    res.text = target + "(이)가 대출되었어요, 왈!";
+                    res.text = title + "(이)가 대출됐어요, 왈!";
                 }
                 else{
                     // if someone already borrows, notifies it
-                    res.text = target + "(이)가 이미 대출 중입니다.\n대여자는 " + doc.data().borrower + "님입니다.";
+                    res.text = title + "(이)가 이미 대출 중이예요.\n대여자는 " + doc.data().borrower + "님입니다, 왈!";
                 }
             }
         });
         // send response query to Dooray! Messenger
+        // Success: status code 200
         response.send(res);
         // return Promise
         return;
@@ -337,7 +359,7 @@ exports.bookreturn = functions.https.onRequest((request, response) => {
         /*  ephemeral: only I can see this message
             inChannel : everyone can see this message */
         'responseType': 'ephemeral',
-        'text': "해당 도서는 현재 대여 중이 아닙니다."
+        'text': "해당 도서는 현재 대여 중이 아니다옹~"
     };
     // get command param, remove spaces
     var title = request.body.text.trim();
@@ -355,10 +377,11 @@ exports.bookreturn = functions.https.onRequest((request, response) => {
                     'borrower': ''
                 });
                 // modify response text
-                res.text = "도서가 반납되었습니다.";
+                res.text = title + "(을)를 반납했다옹~";
             }
         });
         // send response query to Dooray! Messenger
+        // Success: status code 200
         response.send(res);
         // return Promise
         return;
