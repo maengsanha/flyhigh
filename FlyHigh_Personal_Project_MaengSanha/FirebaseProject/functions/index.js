@@ -12,11 +12,18 @@ var db = admin.firestore();
 // Create and Deploy Your First Cloud Functions
 // https://firebase.google.com/docs/functions/write-firebase-functions
 
+
+// // command: /hello
 // exports.helloFirebase = functions.https.onRequest((request, response) => {
-//     res = {
-//         'text': "Hello from Firebase!",
-//         'responseType': 'ephemeral'
+//     // create response query
+//     var res = {
+//         /*  ephemeral: only I can see this message
+//             inChannel : everyone can see this message */
+//         'responseType': 'ephemeral',
+//         'text': "Hello from Firebase!"
 //     };
+//     // send response query to Dooray! Messenger
+//     // Success: status code: 200
 //     response.send(res);
 // });
 
@@ -38,7 +45,7 @@ exports.lib = functions.https.onRequest((request, response) => {
             }
         });
         // send response qeury to Dooray! Messenger
-        // Success: status code 200
+        // Success: status code: 200
         response.send(res);
         // return Promise
         return;
@@ -75,7 +82,7 @@ exports.bookadd = functions.https.onRequest((request, response) => {
         'borrower': query[6]
     });
     // send response query to Dooray! Messenger
-    // Success: status code 200
+    // Success: status code: 200
     response.send(res);
 });
 
@@ -108,7 +115,7 @@ exports.booksearch = functions.https.onRequest((request, response) => {
             }
         });
         // send response query to Dooray! Messenger
-        // Success: status code 200
+        // Success: status code: 200
         response.send(res);
         // return Promise
         return;
@@ -133,7 +140,7 @@ exports.bookreq = functions.https.onRequest((request, response) => {
         'applicant': query[3],
         'office': query[4],
         'url': query[5],
-        'is_purchased': false
+        'reqstat': '구매 신청 중'
     };
     // set data on Database
     db.collection('RequiredBooks').doc().set(data);
@@ -145,7 +152,7 @@ exports.bookreq = functions.https.onRequest((request, response) => {
         'text': data.applicant + "님, " + data.book_title + "(이)가 신청됐어요, 왈!"
     };
     // send response query to Dooray! Messenger
-    // Success: status code 200
+    // Success: status code: 200
     response.send(res);
 });
 
@@ -157,7 +164,7 @@ exports.borrowable = functions.https.onRequest((request, response) => {
         /*  ephemeral: only I can see this message
             inChannel : everyone can see this message */
         'responseType': 'ephemeral',
-        'text': "대여 가능한 도서 목록은 여기 있어요, 왈!\n\n"
+        'text': "대여 가능한 도서 목록이다옹~\n\n"
     };
     db.collection('BookList').get().then((snapshot) => {
         snapshot.forEach((doc) => {
@@ -168,7 +175,7 @@ exports.borrowable = functions.https.onRequest((request, response) => {
             } 
         });
         // send response query to Dooray! Messenger
-        // Success: status code 200
+        // Success: status code: 200
         response.send(res);
         // return Promise
         return;
@@ -197,7 +204,7 @@ exports.delreqbook = functions.https.onRequest((request, response) => {
                 // delete data from Database
                 db.collection('RequiredBooks').doc(doc.id).delete();
                 // send response query to Dooray! Messenger
-                // Success: status code 200
+                // Success: status code: 200
                 response.send(res);
             }
         });
@@ -228,7 +235,7 @@ exports.bookdel = functions.https.onRequest((request, response) => {
                 // delete data from Database
                 db.collection('BookList').doc(doc.id).delete();
                 // send response query to Dooray! Messenger
-                // Success: status code 200
+                // Success: status code: 200
                 response.send(res);
             }
         });
@@ -243,33 +250,43 @@ exports.bookdel = functions.https.onRequest((request, response) => {
 
 // // command: /bookedit book_title, author, publisher, category, purchase_date, office, borrower
 // exports.bookedit = functions.https.onRequest((request, response) => {
-//     var parsed_data = request.body.text.split(',', 7);
-//     for (var info in parsed_data){
+//     // get command param, split by commas
+//     var query = request.body.text.split(',', 7);
+//     for (var info in query){
+//         // remove spaces
 //         info.trim();
 //     }
-//     var target = parsed_data[0];
+//     var title = query[0];
+//     // create reponse query
 //     var res = {
+//         /*  ephemeral: only I can see this message
+//             inChannel : everyone can see this message */
 //         'responseType': 'ephemeral',
-//         'text': "도서 목록에서 " + target + "의 도서 정보가 수정되었습니다."
+//         'text': "도서 목록에서 " + title + "의 도서 정보가 수정되었습니다."
 //     };
 //     db.collection('BookList').get().then((snapshot) => {
 //         snapshot.forEach((doc) => {
 //             var data = doc.data();
-//             if (data.book_title===target){
+//             if (data.book_title===title){
 //                 db.collection('BookList').doc(doc.id).set({
-//                     'book_title': parsed_data[0],
-//                     'author': parsed_data[1],
-//                     'publisher': parsed_data[2],
-//                     'category': parsed_data[3],
-//                     'purchase_date': parsed_data[4],
-//                     'office': parsed_data[5],
-//                     'borrower': parsed_data[6]
+//                     // updates data
+//                     'book_title': query[0],
+//                     'author': query[1],
+//                     'publisher': query[2],
+//                     'category': query[3],
+//                     'purchase_date': query[4],
+//                     'office': query[5],
+//                     'borrower': query[6]
 //                 });
 //             }
 //         });
+//         // send response query to Dooray! Messenger
+//         // Success: status code: 200
 //         response.send(res);
+//         // return Promise
 //         return;
 //     }).catch((err) => {
+//         // if Error occurs, go to Firebase\functions\log
 //         console.log("Error getting documents", err);
 //     });
 // });
@@ -289,11 +306,11 @@ exports.reqList = functions.https.onRequest((request, response) => {
             // not to show DEFAULT data on response query
             if (doc.data().book_title!=='DEFAULT'){
                 res.text += '도서명: ' + doc.data().book_title + '\nurl: ' + doc.data().url;
-                res.text += '\n신청자: ' + doc.data().applicant + '\n구매여부: ' + doc.data().is_purchased + '\n\n';
+                res.text += '\n신청자: ' + doc.data().applicant + '\n구매 신청 현황: ' + doc.data().reqstat + '\n\n';
             }
         });
         // send response query to Dooray! Messenger
-        // Success: status code 200
+        // Success: status code: 200
         response.send(res);
         // return Promise
         return;
@@ -316,7 +333,7 @@ exports.borrow = functions.https.onRequest((request, response) => {
         /*  ephemeral: only I can see this message
             inChannel : everyone can see this message */
         'responseType': 'ephemeral',
-        'text': title + "이 도서 목록에 없어요\n도서를 신청하시려면 /req를 이용해주세요, 왈!"
+        'text': title + "(이)가 도서 목록에 없다옹~\n도서를 신청하시려면 /req를 이용해달라옹~"
     };
     db.collection('BookList').get().then((snapshot) => {
         snapshot.forEach((doc) => {
@@ -332,16 +349,16 @@ exports.borrow = functions.https.onRequest((request, response) => {
                         'office': doc.data().office,
                         'borrower': user_name
                     });
-                    res.text = title + "(이)가 대출됐어요, 왈!";
+                    res.text = title + "(이)가 대출됐다옹~";
                 }
                 else{
                     // if someone already borrows, notifies it
-                    res.text = title + "(이)가 이미 대출 중이예요.\n대여자는 " + doc.data().borrower + "님입니다, 왈!";
+                    res.text = title + "(이)가 이미 대출 중이다옹.\n대여자는 " + doc.data().borrower + "(이)다옹~";
                 }
             }
         });
         // send response query to Dooray! Messenger
-        // Success: status code 200
+        // Success: status code: 200
         response.send(res);
         // return Promise
         return;
@@ -381,7 +398,7 @@ exports.bookreturn = functions.https.onRequest((request, response) => {
             }
         });
         // send response query to Dooray! Messenger
-        // Success: status code 200
+        // Success: status code: 200
         response.send(res);
         // return Promise
         return;
