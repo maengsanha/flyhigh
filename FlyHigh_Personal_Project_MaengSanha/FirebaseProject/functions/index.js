@@ -27,7 +27,7 @@ const db = admin.firestore();
 /*});                                                                            */
 /*********************************************************************************/
 
-// ---------------------------------------------------- User Command ----------------------------------------------------
+// -------------------------------------------------------- User Command --------------------------------------------------------
 
 // command: /lib
 exports.lib = functions.https.onRequest((request, response) => {
@@ -244,7 +244,7 @@ exports.bookreturn = functions.https.onRequest((request, response) => {
     });
 });
 
-// ---------------------------------------------------- Admin Command ----------------------------------------------------
+// -------------------------------------------------------- Admin Command --------------------------------------------------------
 
 // command: /bookadd book_title, author, publisher, category, purchase_date, office, borrower
 exports.bookadd = functions.https.onRequest((request, response) => {
