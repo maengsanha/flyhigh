@@ -443,7 +443,7 @@ exports.lib = functions.https.onRequest((request, response) => {
         default: ephemeral
         */
         'responseType': 'ephemeral',
-        'text': "도서 목록 가져왔어요, 왈!\n\n",
+        'text': "도서 목록 가져왔어요, 왈!",
         'attachments': [
             {
                 'callbackId': "flyhigh-library"
