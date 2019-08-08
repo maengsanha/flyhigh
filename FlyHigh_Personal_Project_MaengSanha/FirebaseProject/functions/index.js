@@ -7,6 +7,9 @@ const admin = require('firebase-admin');
 const functions = require('firebase-functions');
 admin.initializeApp();
 
+// import Levenshtein SDK
+const stringSimilarity = require('string-similarity');
+
 // get Database from Firestore
 const db = admin.firestore();
 
@@ -63,10 +66,11 @@ const db = admin.firestore();
 // }); // end lib
 
 
-// command: /booksearch book_title
+// command: /bookSearch book_title
 exports.bookSearch = functions.https.onRequest((request, response) => {
     // get command param, remove spaces
-    var title = request.body.text.trim();
+    var title = request.body.text.replace(/\s/g,'');
+
     // create default response query
     var res = {
         /*
@@ -74,24 +78,32 @@ exports.bookSearch = functions.https.onRequest((request, response) => {
         inChannel : everyone can see this message
         */
         'responseType': 'ephemeral',
-        'text': "해당 도서가 존재하지 않아요, 왈!"
+        'text': ''
     };
+
     db.collection('BookList').get().then((snapshot) => {
         snapshot.forEach((doc) => {
             var data = doc.data();
-            if (data.book_title === title){
+
+            var _title = data.book_title.replace(/\s/g,'');
+
+            // compare two titles' similarity
+            var similarity = stringSimilarity.compareTwoStrings(title, _title);
+            // if two titles are related
+            if (similarity!==0){
                 // if book is not on loan
                 if (data.borrower_email === ''){
-                    res.text = title + '(은)는 ' + data.office + "에 있어요.\n지금 대여 가능합니다, 왈!";
-                    response.send(res);
+                    res.text += data.book_title + '(은)는 ' + data.office + "에 있어요.\n지금 대여 가능합니다, 왈!\n";
                 }
                 // if book is on loan
                 else{
-                    res.text = title + '(은)는 ' + data.office + "에 있어요.\n현재 대여중입니다.\n" + '대여자는 ' + data.borrower_email + '님입니다, 왈!';
-                    response.send(res);
+                    res.text += data.book_title + '(은)는 ' + data.office + "에 있어요.\n현재 대여중입니다.\n" + '대여자는 ' + data.borrower_email + '님입니다, 왈!\n';
                 }
             }
         }); // end forEach
+        if (res.text===''){
+            res.text = "해당 키워드로 검색한 결과가 존재하지 않아요, 왈!";
+        }
         // send response query to Dooray! Messenger
         // Success -> status code: 200
         response.send(res);
@@ -104,21 +116,14 @@ exports.bookSearch = functions.https.onRequest((request, response) => {
 }); // end bookSearch
 
 
-// command: /req book_title, author, publisher, applicant, office, url
-exports.bookReq = functions.https.onRequest((request, response) => {
-    // get command param, split by commas
-    var query = request.body.text.split(',', 6);
-    for (var info in query){
-        // remove spaces
-        info.trim();
-    }
+// command: /reqBook url
+exports.reqBook = functions.https.onRequest((request, response) => {
+    var applicant = request.body.user.email;
+    // get command param, remove spaces
+    var url = request.body.text.trim();
     var data = {
-        'book_title': query[0],
-        'author': query[1],
-        'publisher': query[2],
-        'applicant': query[3],
-        'office': query[4],
-        'url': query[5],
+        'url': url,
+        'applicant': applicant,
         'reqstat': '구매 신청 중'
     };
     // set data on Database
@@ -130,7 +135,7 @@ exports.bookReq = functions.https.onRequest((request, response) => {
         inChannel : everyone can see this message
         */
         'responseType': 'ephemeral',
-        'text': data.applicant + "님, " + data.book_title + "(이)가 신청됐어요, 왈!"
+        'text': "도서 신청이 완료됐어요, 왈!"
     };
     // send response query to Dooray! Messenger
     // Success -> status code: 200
@@ -219,7 +224,7 @@ exports.bookReq = functions.https.onRequest((request, response) => {
 // }); // end borrow
 
 
-// command: /return book_title
+// command: /bookReturn book_title
 exports.bookReturn = functions.https.onRequest((request, response) => {
     // create default response query
     var res = {
@@ -234,7 +239,7 @@ exports.bookReturn = functions.https.onRequest((request, response) => {
     var title = request.body.text.trim();
     db.collection('BookList').get().then((snapshot) => {
         snapshot.forEach((doc) => {
-            if (doc.data().book_title===title){
+            if (doc.data().book_title.replace(/\s/g,'')===title.replace(/\s/g,'')){
                 // updates data info
                 db.collection('BookList').doc(doc.id).update({
                     'borrower_email': ''
@@ -256,7 +261,7 @@ exports.bookReturn = functions.https.onRequest((request, response) => {
 
 // ------------------------------------------------------------ Admin Command ------------------------------------------------------------
 
-// command: /bookadd book_title, author, publisher, category, purchase_date, office, borrower_email
+// command: /bookAdd book_title, author, publisher, category, purchase_date, office, borrower_email
 exports.bookAdd = functions.https.onRequest((request, response) => {
     // get command param, split by commas
     var query = request.body.text.split(',', 7);
@@ -289,7 +294,7 @@ exports.bookAdd = functions.https.onRequest((request, response) => {
 }); // end bookAdd
 
 
-// command: /bookdel book_title
+// command: /bookDel book_title
 exports.bookDel = functions.https.onRequest((request, response) => {
     // get command param, remove spaces
     var title = request.body.text.trim();
@@ -399,8 +404,8 @@ exports.reqList = functions.https.onRequest((request, response) => {
 }); // end reqList
 
 
-// command: /delreq book_title
-exports.delReq = functions.https.onRequest((request, response) => {
+// command: /reqDel book_title
+exports.reqDel = functions.https.onRequest((request, response) => {
     // get command param, remove spaces
     var title = request.body.text.trim();
     // create response query
