@@ -7,7 +7,7 @@ const admin = require('firebase-admin');
 const functions = require('firebase-functions');
 admin.initializeApp();
 
-// import Levenshtein SDK
+// import string-similarity SDK
 const stringSimilarity = require('string-similarity');
 
 // get Database from Firestore
