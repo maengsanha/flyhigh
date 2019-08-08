@@ -118,7 +118,7 @@ exports.bookSearch = functions.https.onRequest((request, response) => {
 
 // command: /bookReq url
 exports.bookReq = functions.https.onRequest((request, response) => {
-    var applicant = request.body.user.email;
+    var applicant = request.body.userEmail;
     // get command param, remove spaces
     var url = request.body.text.trim();
     var data = {
@@ -245,7 +245,7 @@ exports.bookReturn = functions.https.onRequest((request, response) => {
                     'borrower_email': ''
                 });
                 // update response text
-                res.text = title + "(을)를 반납했어요, 왈!.";
+                res.text = doc.data().book_title + "(을)를 반납했어요, 왈!.";
             }
         }); // end forEach
         // send response query to Dooray! Messenger
@@ -388,7 +388,7 @@ exports.reqList = functions.https.onRequest((request, response) => {
         snapshot.forEach((doc) => {
             // not to show DEFAULT data on response query
             if (doc.data().book_title!=='DEFAULT'){
-                res.text += '도서명: ' + doc.data().book_title + '\nurl: ' + doc.data().url;
+                res.text += 'url: ' + doc.data().url;
                 res.text += '\n신청자: ' + doc.data().applicant + '\n구매 신청 현황: ' + doc.data().reqstat + '\n\n';
             }
         }); // end forEach
