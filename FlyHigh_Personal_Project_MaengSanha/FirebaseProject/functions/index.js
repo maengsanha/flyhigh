@@ -116,8 +116,8 @@ exports.bookSearch = functions.https.onRequest((request, response) => {
 }); // end bookSearch
 
 
-// command: /reqBook url
-exports.reqBook = functions.https.onRequest((request, response) => {
+// command: /bookReq url
+exports.bookReq = functions.https.onRequest((request, response) => {
     var applicant = request.body.user.email;
     // get command param, remove spaces
     var url = request.body.text.trim();
