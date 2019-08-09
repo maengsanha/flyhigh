@@ -1,13 +1,13 @@
 // jshint esversion: 8
 // Runtime: Node.js 8
-// firebase--version: 7.2.2
+// firebase --version: 7.2.2
 
 // import admin SDK
 const admin = require('firebase-admin');
 const functions = require('firebase-functions');
 admin.initializeApp();
 
-// import string-similarity SDK
+// import string-similarity library
 const stringSimilarity = require('string-similarity');
 
 // get Database from Firestore
@@ -20,11 +20,7 @@ const db = admin.firestore();
 /*// command: /hello                                                             */
 /*exports.helloFirebase = functions.https.onRequest((request, response) => {     */
 /*    // create response query                                                   */
-/*    var res = {                                                                */
-/*        /*                                                                     */
-/*        ephemeral: only I can see this message                                 */
-/*        inChannel : everyone can see this message                              */
-/*        */                                                                     /*
+/*    var res = {                                                                */                                                                   /*
 /*        'responseType': 'ephemeral',                                           */
 /*        'text': "Hello from Firebase!"                                         */
 /*    };                                                                         */
@@ -34,7 +30,7 @@ const db = admin.firestore();
 /*});                                                                            */
 /*********************************************************************************/
 
-// ------------------------------------------------------------ User Command ------------------------------------------------------------
+// ------------------------------------------------------------------------------- User Command -------------------------------------------------------------------------------
 
 // // command: /lib
 // exports.lib = functions.https.onRequest((request, response) => {
@@ -66,10 +62,111 @@ const db = admin.firestore();
 // }); // end lib
 
 
-// command: /bookSearch book_title
+// command: /lib
+exports.lib = functions.https.onRequest((request, response) => {
+    // create response query with button attachments
+    var res = {
+        /*
+        ephemeral: only I can see this message
+        inChannel : everyone can see this message
+        default: ephemeral
+        */
+        'responseType': 'ephemeral',
+        'text': "도서 목록 가져왔어요, 왈!",
+        'attachments': [
+            {
+                'callbackId': "flyhigh-library"
+            }
+        ] // end attachments
+    }; // end res
+    db.collection('BookList').get().then((snapshot) => {
+        snapshot.forEach((doc) => {
+            var data = doc.data();
+            var title = data.book_title;
+            if (title!=='DEFAULT')
+            {
+                var field = {
+                    'fields': [
+                        {
+                            'title': title,
+                            'value': '',
+                            'short': true
+                        }
+                    ]
+                };
+                var action = {
+                    'actions': [
+                        {
+                            'type': 'button',
+                            'text': '대여하기',
+                            'name': title,
+                            'value': 'btnValue'
+                        }
+                    ]
+                };
+                if (data.borrower_email!=='')
+                    action.actions[0].text = '대여 중';
+                res.attachments.push(field, action);
+            }
+        }); // end forEach
+        // send response query to Dooray! Messenger
+        // Success -> status code: 200
+        response.send(res);
+        // return Promise
+        return;
+    }).catch((err) => {
+        // if Error occurs, go to Firebase\functions\log
+        console.log("Error getting documents", err);
+    }); // end then
+}); // end lib
+
+
+exports.borrow = functions.https.onRequest((request, response) => {
+    // get data from request query
+    var borrower_email = request.body.user.email;
+    var title = request.body.actionName;
+    // create default response query
+    var res = {
+        /*
+        ephemeral: only I can see this message
+        inChannel : everyone can see this message
+        default: ephemeral
+        */
+        'responseType': 'ephemeral',
+        'deleteOriginal': true,
+        'text': 'DEFAULT'
+    };
+    db.collection('BookList').get().then((snapshot) => {
+        snapshot.forEach((doc) => {
+            var data = doc.data();
+            if (data.book_title===title)
+            {
+                if (data.borrower_email!=='')
+                    res.text = "해당 도서는 현재 대여 중이예요, 대여자는 " + data.borrower_email + "님입니다, 왈!";
+                else
+                {
+                    // update data
+                    db.collection('BookList').doc(doc.id).update({'borrower_email': borrower_email});
+                    res.text = "도서 대여가 완료됐어요, 왈!";
+                }
+                // send response query to Dooray! Messenger
+                // Success -> status code: 200
+                response.send(res);
+            }
+        }); // end forEach
+        // return Promise
+        return;
+    }).catch((err) => {
+        // if Error occurs, go to Firebase\functions\log
+        console.log("Error getting documnets", err);
+    }); // end then
+}); // end borrow
+
+
+// command: /bookSearch key_word
 exports.bookSearch = functions.https.onRequest((request, response) => {
     // get command param, remove spaces
-    var title = request.body.text.replace(/\s/g,'');
+    var key_word = request.body.text.replace(/\s/g,'');
 
     // create default response query
     var res = {
@@ -88,22 +185,20 @@ exports.bookSearch = functions.https.onRequest((request, response) => {
             var _title = data.book_title.replace(/\s/g,'');
 
             // compare two titles' similarity
-            var similarity = stringSimilarity.compareTwoStrings(title, _title);
+            var similarity = stringSimilarity.compareTwoStrings(key_word, _title);
             // if two titles are related
-            if (similarity!==0){
+            if (similarity!==0)
+            {
                 // if book is not on loan
-                if (data.borrower_email === ''){
+                if (data.borrower_email === '')
                     res.text += data.book_title + '(은)는 ' + data.office + "에 있어요.\n지금 대여 가능합니다, 왈!\n";
-                }
                 // if book is on loan
-                else{
+                else
                     res.text += data.book_title + '(은)는 ' + data.office + "에 있어요.\n현재 대여중입니다.\n" + '대여자는 ' + data.borrower_email + '님입니다, 왈!\n';
-                }
             }
         }); // end forEach
-        if (res.text===''){
+        if (res.text==='')
             res.text = "해당 키워드로 검색한 결과가 존재하지 않아요, 왈!";
-        }
         // send response query to Dooray! Messenger
         // Success -> status code: 200
         response.send(res);
@@ -239,7 +334,8 @@ exports.bookReturn = functions.https.onRequest((request, response) => {
     var title = request.body.text.trim();
     db.collection('BookList').get().then((snapshot) => {
         snapshot.forEach((doc) => {
-            if (doc.data().book_title.replace(/\s/g,'')===title.replace(/\s/g,'')){
+            if (doc.data().book_title.replace(/\s/g,'')===title.replace(/\s/g,''))
+            {
                 // updates data info
                 db.collection('BookList').doc(doc.id).update({
                     'borrower_email': ''
@@ -256,19 +352,18 @@ exports.bookReturn = functions.https.onRequest((request, response) => {
     }).catch((err) => {
         // if Error occurs, go to Firebase\functions\log
         console.log("Error getting documents", err);
-    }); // end  then
+    }); // end then
 }); // end bookReturn
 
-// ------------------------------------------------------------ Admin Command ------------------------------------------------------------
+// ----------------------------------------------------------------------------------------- Admin Command -----------------------------------------------------------------------------------------
 
 // command: /bookAdd book_title, author, publisher, category, purchase_date, office, borrower_email
 exports.bookAdd = functions.https.onRequest((request, response) => {
     // get command param, split by commas
     var query = request.body.text.split(',', 7);
     // remove spaces
-    for (var info in query){
+    for (var info in query)
         info.trim();
-    }
     // create response query
     var res = {
         /*
@@ -287,7 +382,7 @@ exports.bookAdd = functions.https.onRequest((request, response) => {
         'purchase_date': query[4],
         'office': query[5],
         'borrower_email': query[6]
-    });
+    }); // end set
     // send response query to Dooray! Messenger
     // Success -> status code: 200
     response.send(res);
@@ -310,7 +405,8 @@ exports.bookDel = functions.https.onRequest((request, response) => {
     db.collection('BookList').get().then((snapshot) => {
         snapshot.forEach((doc) => {
             var data = doc.data();
-            if (data.book_title===title){
+            if (data.book_title===title)
+            {
                 // delete data from Database
                 db.collection('BookList').doc(doc.id).delete();
                 // send response query to Dooray! Messenger
@@ -387,10 +483,8 @@ exports.reqList = functions.https.onRequest((request, response) => {
     db.collection('RequiredBooks').get().then((snapshot) => {
         snapshot.forEach((doc) => {
             // not to show DEFAULT data on response query
-            if (doc.data().book_title!=='DEFAULT'){
-                res.text += 'url: ' + doc.data().url;
-                res.text += '\n신청자: ' + doc.data().applicant + '\n구매 신청 현황: ' + doc.data().reqstat + '\n\n';
-            }
+            if (doc.data().book_title!=='DEFAULT')
+                res.text += 'url: ' + doc.data().url + '\n신청자: ' + doc.data().applicant + '\n구매 신청 현황: ' + doc.data().reqstat + '\n\n';
         }); // end forEach
         // send response query to Dooray! Messenger
         // Success -> status code: 200
@@ -420,7 +514,8 @@ exports.reqDel = functions.https.onRequest((request, response) => {
     db.collection('RequiredBooks').get().then((snapshot) => {
         snapshot.forEach((doc) => {
             var data = doc.data();
-            if (data.book_title===title){
+            if (data.book_title===title)
+            {
                 // delete data from Database
                 db.collection('RequiredBooks').doc(doc.id).delete();
                 // send response query to Dooray! Messenger
@@ -434,105 +529,4 @@ exports.reqDel = functions.https.onRequest((request, response) => {
         // if Error occurs, go to Firebase\functions\log
         console.log("Error getting documents", err);
     }); // end then
-}); // end delReq
-
-// ------------------------------------------------------------ Button Attachment ------------------------------------------------------------
-
-// command: /lib
-exports.lib = functions.https.onRequest((request, response) => {
-    // create response query with button attachments
-    var res = {
-        /*
-        ephemeral: only I can see this message
-        inChannel : everyone can see this message
-        default: ephemeral
-        */
-        'responseType': 'ephemeral',
-        'text': "도서 목록 가져왔어요, 왈!",
-        'attachments': [
-            {
-                'callbackId': "flyhigh-library"
-            }
-        ] // end attachments
-    }; // end res
-    db.collection('BookList').get().then((snapshot) => {
-        snapshot.forEach((doc) => {
-            var data = doc.data();
-            var title = data.book_title;
-            if (title!=='DEFAULT'){
-                var field = {
-                    'fields': [
-                        {
-                            'title': title,
-                            'value': '',
-                            'short': true
-                        }
-                    ]
-                };
-                var action = {
-                    'actions': [
-                        {
-                            'type': 'button',
-                            'text': '대여하기',
-                            'name': title,
-                            'value': 'btnValue'
-                        }
-                    ]
-                };
-                if (data.borrower_email!==''){
-                    action.actions[0].text = '대여 중';
-                }
-                res.attachments.push(field, action);
-            }
-        }); // end forEach
-        // send response query to Dooray! Messenger
-        // Success -> status code: 200
-        response.send(res);
-        // return Promise
-        return;
-    }).catch((err) => {
-        // if Error occurs, go to Firebase\functions\log
-        console.log("Error getting documents", err);
-    }); // end then
-}); // end libWithBtn
-
-
-exports.borrow = functions.https.onRequest((request, response) => {
-    // get data from request query
-    var borrower_email = request.body.user.email;
-    var title = request.body.actionName;
-    // create default response query
-    var res = {
-        /*
-        ephemeral: only I can see this message
-        inChannel : everyone can see this message
-        default: ephemeral
-        */
-        'responseType': 'ephemeral',
-        'deleteOriginal': true,
-        'text': 'DEFAULT'
-    };
-    db.collection('BookList').get().then((snapshot) => {
-        snapshot.forEach((doc) => {
-            var data = doc.data();
-            if (data.book_title===title){
-                if (data.borrower_email!==''){
-                    res.text = "해당 도서는 현재 대여 중이예요, 대여자는 " + data.borrower_email + "님입니다, 왈!";
-                }
-                else{
-                    // update data
-                    db.collection('BookList').doc(doc.id).update({'borrower_email': borrower_email});
-                    res.text = "도서 대여가 완료됐어요, 왈!";
-                }
-                // send response query to Dooray! Messenger
-                // Success -> status code: 200
-                response.send(res);
-            }
-        }); // end forEach
-        // return Promise
-        return;
-    }).catch((err) => {
-        // if Error occurs, go to Firebase\functions\log
-        console.log("Error getting documnets", err);
-    });
-});
+}); // end reqDel
