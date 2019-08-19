@@ -20,7 +20,7 @@ const db = admin.firestore();
 /*// command: /hello                                                             */
 /*exports.helloFirebase = functions.https.onRequest((request, response) => {     */
 /*    // create response query                                                   */
-/*    var res = {                                                                */                                                                   /*
+/*    var res = {                                                                */
 /*        'responseType': 'ephemeral',                                           */
 /*        'text': "Hello from Firebase!"                                         */
 /*    };                                                                         */
