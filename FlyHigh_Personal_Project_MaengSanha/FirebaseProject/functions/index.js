@@ -443,7 +443,7 @@ exports.reqList = functions.https.onRequest((request, response) => {
     };
     db.collection('RequiredBooks').get().then((snapshot) => {
         snapshot.forEach((doc) => {
-            if (doc.data().book_title!=='DEFAULT')    // not to show DEFAULT data on response query
+            if (doc.id!=='DEFAULT')    // not to show DEFAULT data on response query
                 res.text += 'url: ' + doc.data().url + '\n신청자: ' + doc.data().applicant + '\n구매 신청 현황: ' + doc.data().reqstat + '\n\n';
         }); // end forEach
         // send response query to Dooray! Messenger
