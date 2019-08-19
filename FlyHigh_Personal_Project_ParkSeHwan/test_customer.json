@@ -1,0 +1,510 @@
+{
+    "omnidoc": [{
+            "customer": "flyhigh",
+            "type": [
+                "windows"
+            ],
+            "contact": [{
+                "name": "임홍택",
+                "email": "tlafl0@flyhigh-x.com",
+                "phone": "010-4439-1480",
+                "remarks": null
+            }],
+            "document": {
+                "CREDIT4U": {
+                    "CREDIT4U_MY_INSU_CREDIT": "00100001",
+                    "CREDIT4U_MY_INSU_FIX": "00100002",
+                    "CREDIT4U_MY_INSU_SILSON": "00100003"
+                }
+            }
+        },
+        {
+            "customer": "kb_sonhaebohum",
+            "type": [
+                "windows"
+            ],
+            "contact": [{
+                    "name": "전대성",
+                    "email": "dsjeon@kbinsure.co.kr",
+                    "phone": null,
+                    "remarks": null
+                },
+                {
+                    "name": "이정용",
+                    "email": "jimlee@kbinsure.co.kr",
+                    "phone": null,
+                    "remarks": null
+                },
+                {
+                    "name": "서지환",
+                    "email": "lnijjhs@kbinsure.co.kr",
+                    "phone": null,
+                    "remarks": null
+                },
+                {
+                    "name": "정건식 과장",
+                    "email": "ligherojgs@kbinsure.co.kr",
+                    "phone": null,
+                    "remarks": null
+                },
+                {
+                    "name": "박승호 ",
+                    "email": "hoya0220@kbinsure.co.kr",
+                    "phone": null,
+                    "remarks": null
+                }
+            ],
+            "document": {
+                "MW24": {
+                    "MW24_JUMIND": "04000002",
+                    "MW24_JUMINC": "04000004"
+                },
+                "SCF": {
+                    "SCF_GAJOK": "01000002"
+                },
+                "NHIS": {
+                    "NHIS_JAGEOK": "20000001",
+                    "NHIS_NABBU": "20000002"
+                },
+                "NTS": {
+                    "NTS_SODEUK_BONGGUP": "08010000",
+                    "NTS_SODEUK_SAUP": "08020000",
+                    "NTS_SODEUK_JONGHAP": "08040000",
+                    "NTS_CREDITCARD_USE": "08000004",
+                    "NTS_JEONGSAN": "08000005"
+                },
+                "NPS": {
+                    "NPS_NPS_JOIN": "10000002"
+                },
+                "ECAR": {
+                    "ECAR_DEUNGLOGWONBU": "80000001"
+                }
+            }
+        },
+        {
+            "customer": "kb_card",
+            "type": [
+                "ios",
+                "android"
+            ],
+            "contact": [{
+                    "name": "이재민",
+                    "email": "geminihaha@seeroo.co.kr",
+                    "phone": "010-7195-0780",
+                    "remarks": "Android"
+                },
+                {
+                    "name": "김응엽",
+                    "email": "eungyeop.kim@seeroo.co.kr",
+                    "phone": "010-9152-1876",
+                    "remarks": "IOS"
+                },
+                {
+                    "name": "최우진",
+                    "email": "wjchoi@seeroo.co.kr",
+                    "phone": "010-9422-2189",
+                    "remarks": "참조"
+                }
+            ],
+            "document": {
+                "NHIS": {
+                    "NHIS_JAGEOK": "20000001",
+                    "NHIS_NABBU": "20000002",
+                    "NHIS_JAGEOK_CHECK": "20000003"
+                },
+                "NTS": {
+                    "NTS_SODEUK_BONGGUP": "08010000",
+                    "NTS_SODEUK_SAUP": "08020000",
+                    "NTS_SODEUK_JONGHAP": "0804000",
+                    "NTS_SAUPJA": "08000002",
+                    "NTS_VAT_GWASE": "08000003",
+                    "NTS_MYOUNSESUIP": "08000006"
+                }
+            }
+        },
+        {
+            "customer": "shinhan_bank",
+            "type": [
+                "ios",
+                "android"
+            ],
+            "contact": [{
+                    "name": "남기승",
+                    "email": "ksnam@fintech1.co.kr",
+                    "phone": null,
+                    "remarks": null
+                },
+                {
+                    "name": "남기승",
+                    "email": "ksnam1@gmail.com",
+                    "phone": null,
+                    "remarks": null
+                }
+            ],
+            "document": {
+                "NHIS": {
+                    "NHIS_JAGEOK": "20000001",
+                    "NHIS_NABBU": "20000002"
+                },
+                "NTS": {
+                    "NTS_SODEUK_BONGGUP": "08010000",
+                    "NTS_SODEUK_SAUP": "08020000",
+                    "NTS_SODEUK_JONGHAP": "0804000",
+                    "NTS_SAUPJA": "08000002",
+                    "NTS_VAT_GWASE": "08000003",
+                    "NTS_JEONGSAN": "08000005",
+                    "NTS_NABSE": "08000008"
+                },
+                "SCF": {
+                    "SCF_GAJOK": "01000002",
+                    "SCF_HONIN": "01000004"
+                },
+                "MW24": {
+                    "MW24_JUMIND": "04000002",
+                    "MW24_JUMINC": "04000004",
+                    "MW24_JIBANGSENAB": "04000007"
+                },
+                "ECAR": {
+                    "ECAR_DEUNGLOGWONBU": "80000001"
+                }
+            }
+        },
+        {
+            "customer": "wemobility",
+            "type": [
+                "ios",
+                "android"
+            ],
+            "contact": [{
+                    "name": "이정현",
+                    "email": "heylee@wemobility.co",
+                    "phone": null,
+                    "remarks": null
+                },
+                {
+                    "name": "위모개발자그룹",
+                    "email": "dev@wemobility.co",
+                    "phone": null,
+                    "remarks": null
+                },
+                {
+                    "name": "이유번",
+                    "email": "yubeon@wemobility.co",
+                    "phone": null,
+                    "remarks": null
+                },
+                {
+                    "name": "이준희",
+                    "email": "ljh@wemobility.co",
+                    "phone": null,
+                    "remarks": null
+                }
+            ],
+            "document": {
+                "NHIS": {
+                    "NHIS_JAGEOK": "20000001"
+                },
+                "CREDIT4U": {
+                    "CREDIT4U_MY_INSU_CREDIT": "00100001",
+                    "CREDIT4U_MY_INSU_FIX": "00100002",
+                    "CREDIT4U_MY_INSU_SILSON": "00100003"
+                },
+                "CONTI": {
+                    "CONTI_INSUSEARCH": "80600001"
+                },
+                "CRIME": {
+                    "CRIME_SEARCH": "01300001"
+                },
+                "EFINE": {
+                    "EFINE_LICENSECAREER": "80300008"
+                }
+            }
+        },
+        {
+            "customer": "shinhan_card",
+            "type": [],
+            "contact": [],
+            "document": {
+                "NHIS": {
+                    "NHIS_JAGEOK": "20000001",
+                    "NHIS_NABBU": "20000002"
+                },
+                "NTS": {
+                    "NTS_SODEUK_BONGGUP": "08010000",
+                    "NTS_SODEUK_SAUP": "08020000",
+                    "NTS_SODEUK_JONGHAP": "0804000",
+                    "NTS_SAUPJA": "08000002",
+                    "NTS_VAT_GWASE": "08000003"
+                },
+                "GOV24": {
+                    "GOV24_ALIENREG": "03000009",
+                    "GOV24_LIVINGIN": "0300000A",
+                    "GOV24_INNOUT": "03000008",
+                    "GOV24_JUMIND": "03000002"
+                },
+                "NPS": {
+                    "NPS_MEMBER_PAY": "10000003"
+                }
+
+            }
+        },
+        {
+            "customer": "kakao_bank",
+            "type": [
+                "ios",
+                "android",
+                "library_windows"
+            ],
+            "contact": [{
+                    "name": "임홍택",
+                    "email": "tlafl0@flyhigh-x.com",
+                    "phone": null,
+                    "remarks": null
+                },
+                {
+                    "name": "하정대",
+                    "email": "sa2ntjulian@flyhigh-x.com",
+                    "phone": null,
+                    "remarks": null
+                }
+            ],
+            "document": {
+                "KCB": {
+                    "KCB_CREDITSUMMARY": "80400001"
+                },
+                "MW24": {
+                    "MW24_JUMIND": "04000002",
+                    "MW24_JUMINC": "04000004"
+                },
+                "NHIS": {
+                    "NHIS_JAGEOK": "20000001",
+                    "NHIS_NABBU": "20000002"
+                },
+                "NTS": {
+                    "NTS_SODEUK_BONGGUP": "08010000",
+                    "NTS_SODEUK_SAUP": "08020000",
+                    "NTS_SODEUK_JONGHAP": "0804000",
+                    "NTS_SAUPJA": "08000002",
+                    "NTS_JEONGSAN": "08000005"
+                },
+                "SCF": {
+                    "SCF_GIBON": "01000001",
+                    "SCF_GAJOK": "01000002",
+                    "SCF_HONIN": "01000004"
+                }
+            }
+        },
+        {
+            "customer": "kb_capital",
+            "type": [
+                "ios",
+                "android"
+            ],
+            "contact": [{
+                    "name": "이원구",
+                    "email": "lovezard34@kbfg.com",
+                    "phone": null,
+                    "remarks": "현업담당"
+                },
+                {
+                    "name": "권기영",
+                    "email": "kykwoun@kbfg.com",
+                    "phone": null,
+                    "remarks": "IT담당"
+                },
+                {
+                    "name": "전근식",
+                    "email": "bestdest@kbfg.com",
+                    "phone": null,
+                    "remarks": null
+                },
+                {
+                    "name": "고경래",
+                    "email": "krko@hyundai-autoever.com",
+                    "phone": null,
+                    "remarks": null
+                },
+                {
+                    "name": "조상현",
+                    "email": "shcho@iotree.co.kr",
+                    "phone": null,
+                    "remarks": null
+                },
+                {
+                    "name": "이민수",
+                    "email": "mslee@iotree.co.kr",
+                    "phone": null,
+                    "remarks": null
+                }
+            ],
+            "document": {
+                "MW24": {
+                    "MW24_JUMIND": "04000002"
+                },
+                "NHIS": {
+                    "NHIS_JAGEOK": "20000001",
+                    "NHIS_NABBU": "20000002"
+                },
+                "NTS": {
+                    "NTS_SODEUK_BONGGUP": "08010000",
+                    "NTS_SODEUK_SAUP": "08020000",
+                    "NTS_SODEUK_JONGHAP": "0804000",
+                    "NTS_JEONGSAN": "08000005",
+                    "NTS_CREDITCARD_USE": "08000004"
+                }
+            }
+        },
+        {
+            "customer": "kb_stock",
+            "type": [
+                "ios",
+                "android"
+            ],
+            "contact": [{
+                "name": "강정오",
+                "email": "kjosuper@naver.com",
+                "phone": null,
+                "remarks": null
+            }],
+            "document": {
+                "NTS": {
+                    "NTS_SAUPJA": "08000002"
+                },
+                "NHIS": {
+                    "NHIS_JAGEOK": "20000001"
+                }
+            }
+        },
+        {
+            "customer": "habitfactory",
+            "type": [
+                "ios",
+                "android"
+            ],
+            "contact": [{
+                    "name": "이동익",
+                    "email": "do@habitfactory.co",
+                    "phone": null,
+                    "remarks": null
+                },
+                {
+                    "name": "",
+                    "email": "sklee@habitfactory.co",
+                    "phone": null,
+                    "remarks": null
+                },
+                {
+                    "name": "",
+                    "email": "robin@habitfactory.co",
+                    "phone": null,
+                    "remarks": null
+                }
+            ],
+            "document": {
+                "CREDIT4U": {
+                    "CREDIT4U_MY_INSU_CREDIT": "00100001",
+                    "CREDIT4U_MY_INSU_FIX": "00100002",
+                    "CREDIT4U_MY_INSU_SILSON": "00100003"
+                }
+            }
+        },
+        {
+            "customer": "kb_life",
+            "type": [
+                "ios",
+                "android",
+                "lua"
+            ],
+            "contact": [{
+                    "name": "김희준",
+                    "email": "juni0227@naver.com",
+                    "phone": null,
+                    "remarks": "외주"
+                },
+                {
+                    "name": "",
+                    "email": "yeogon@jinsolins.co.kr",
+                    "phone": null,
+                    "remarks": "외주"
+                },
+                {
+                    "name": "배준형 팀장",
+                    "email": "aiden.bae@kbfg.com",
+                    "phone": null,
+                    "remarks": "KB생명"
+                },
+
+                {
+                    "name": "권대준 선임",
+                    "email": "daejun.kwon@kbfg.com",
+                    "phone": null,
+                    "remarks": "KB생명"
+                }
+            ],
+            "document": {
+                "GOV24": {
+                    "GOV24_JUMIND": "03000002",
+                    "GOV24_JUMINC": "03000004",
+                    "GOV24_INNOUT": "03000008",
+                    "GOV24_ALIENREG": "03000009",
+                    "GOV24_LIVINGIN": "0300000A"
+                },
+                "NTS": {
+                    "NTS_GONGJE": "0800000B",
+                    "NTS_SAUPJA": "08000002",
+                    "NTS_PIEUP": "08000009"
+                },
+                "SCF": {
+                    "SCF_GAJOK": "01000002",
+                    "SCF_GIBON": "01000001"
+                },
+                "SCJ": {
+                    "SCJ_DEUNGBON": "01100001",
+                    "SCJ_CHOBON": "01100002"
+                }
+            }
+        },
+        {
+            "customer": "hanhwa_investment",
+            "type": [
+                "ios",
+                "android",
+                "windows",
+                "linux"
+            ],
+            "contact": [{
+                    "name": "황기평",
+                    "email": "gongsu@hanwha.com",
+                    "phone": "010-4126-5514",
+                    "remarks": null
+                },
+                {
+                    "name": "안재복",
+                    "email": "Jbahn1106@hanwha.com",
+                    "phone": "010-3708-1008",
+                    "remarks": "홈페이지(담당자)"
+                },
+                {
+                    "name": "이호용",
+                    "email": "hy.lee@hanwha.com",
+                    "phone": " 010-2090-6734",
+                    "remarks": "앱"
+                }
+
+            ],
+            "document": {
+                "FSS100": {
+                    "FSS100_PENSEARCH": "01200001"
+                },
+                "NTS": {
+                    "NTS_SODEUK_BONGGUP": "08010000",
+                    "NTS_SODEUK_SAUP": "08020000",
+                    "NTS_SODEUK_JONGHAP": "08040000"
+                },
+                "NHIS": {
+                    "NHIS_JAGEOK": "20000001"
+                }
+            }
+        }
+    ]
+}

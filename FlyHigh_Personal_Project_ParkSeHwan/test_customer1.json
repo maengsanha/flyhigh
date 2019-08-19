@@ -1,0 +1,125 @@
+{
+    "omnidoc": [
+        {
+            "customer": "customer_test1",
+            "product_type": [
+                "windows"
+            ],
+            "contact": [
+                {
+                    "name": "議고씗吏�",
+                    "email": "kokori@flyhigh-x.com",
+                    "phone": null,
+                    "remarks": null
+                }
+            ],
+            "document": {
+                "MW24": {
+                    "MW24_JUMIND": "04000002",
+                    "MW24_JUMINC": "04000004"
+                },
+                "SCF": {
+                    "SCF_GAJOK": "01000002"
+                },
+                "NHIS": {
+                    "NHIS_JAGEOK": "20000001",
+                    "NHIS_NABBU": "20000002"
+                },
+                "NTS": {
+                    "NTS_SODEUK_BONGGUP": "08010000",
+                    "NTS_SODEUK_SAUP": "08020000",
+                    "NTS_SODEUK_JONGHAP": "08040000",
+                    "NTS_CREDITCARD_USE": "08000004",
+                    "NTS_JEONGSAN": "08000005"
+                },
+                "NPS": {
+                    "NPS_NPS_JOIN": "10000002"
+                },
+                "ECAR": {
+                    "ECAR_DEUNGLOGWONBU": "80000001"
+                }
+            }
+        },
+        {
+            "customer": "customer_test2",
+            "type": [
+                "ios",
+                "android"
+            ],
+            "contact": [{
+                    "name": "議고씗吏�",
+                    "email": "kokori@flyhigh-x.com",
+                    "phone": null,
+                    "remarks": null
+                },
+                {
+                    "name": "諛뺤꽭�솚",
+                    "email": "psh@flyhigh-x.com",
+                    "phone": null,
+                    "remarks": null
+                }
+            ],
+            "document": {
+                "NHIS": {
+                    "NHIS_JAGEOK": "20000001",
+                    "NHIS_NABBU": "20000002",
+                    "NHIS_JAGEOK_CHECK": "20000003"
+                },
+                "NTS": {
+                    "NTS_SODEUK_BONGGUP": "08010000",
+                    "NTS_SODEUK_SAUP": "08020000",
+                    "NTS_SODEUK_JONGHAP": "0804000",
+                    "NTS_SAUPJA": "08000002",
+                    "NTS_VAT_GWASE": "08000003",
+                    "NTS_MYOUNSESUIP": "08000006"
+                }
+            }
+        },
+        {
+            "customer": "customer_test3",
+            "type": [
+                "ios",
+                "android"
+            ],
+            "contact": [
+                {
+                    "name": "諛뺤꽭�솚",
+                    "email": "kokori@flyhigh-x.com",
+                    "phone": null,
+                    "remarks": null
+                }
+            ],
+            "document": {
+                "NHIS": {
+                    "NHIS_JAGEOK": "20000001",
+                    "NHIS_NABBU": "20000002"
+                },
+                "NTS": {
+                    "NTS_SODEUK_BONGGUP": "08010000",
+                    "NTS_SODEUK_SAUP": "08020000",
+                    "NTS_SODEUK_JONGHAP": "0804000",
+                    "NTS_SAUPJA": "08000002",
+                    "NTS_VAT_GWASE": "08000003",
+                    "NTS_JEONGSAN": "08000005",
+                    "NTS_NABSE": "08000008"
+                },
+                "SCF": {
+                    "SCF_GAJOK": "01000002",
+                    "SCF_HONIN": "01000004"
+                },
+                "MW24": {
+                    "MW24_JUMIND": "04000002",
+                    "MW24_JUMINC": "04000004",
+                    "MW24_JIBANGSENAB": "04000007"
+                },
+                "ECAR": {
+                    "ECAR_DEUNGLOGWONBU": "80000001"
+           
+                },
+                 "GOV24": {
+                	"HAWI" : "803493030"
+                }   
+            }
+        }
+    ]
+}
